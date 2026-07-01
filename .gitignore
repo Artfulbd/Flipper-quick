@@ -1,0 +1,13 @@
+# ufbt build artifacts
+.ufbt/
+dist/
+
+# Compiled output
+*.fap
+*.elf
+*.map
+
+# Editor
+.vscode/
+*.swp
+*~

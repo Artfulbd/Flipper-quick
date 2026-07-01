@@ -38,6 +38,10 @@ QuickApp* quick_app_alloc(void) {
     view_dispatcher_add_view(
         app->view_dispatcher, QuickViewButtonMenu, button_menu_get_view(app->button_menu));
 
+    app->text_box = text_box_alloc();
+    view_dispatcher_add_view(
+        app->view_dispatcher, QuickViewTextBox, text_box_get_view(app->text_box));
+
     app->selected_path = furi_string_alloc();
     app->ir_worker     = infrared_worker_alloc();
     app->ir_transmitting = false;
@@ -72,6 +76,7 @@ void quick_app_free(QuickApp* app) {
     view_dispatcher_remove_view(app->view_dispatcher, QuickViewSubmenu);
     view_dispatcher_remove_view(app->view_dispatcher, QuickViewWidget);
     view_dispatcher_remove_view(app->view_dispatcher, QuickViewButtonMenu);
+    view_dispatcher_remove_view(app->view_dispatcher, QuickViewTextBox);
     view_dispatcher_free(app->view_dispatcher);
 
     scene_manager_free(app->scene_manager);
@@ -79,6 +84,7 @@ void quick_app_free(QuickApp* app) {
     submenu_free(app->submenu);
     widget_free(app->widget);
     button_menu_free(app->button_menu);
+    text_box_free(app->text_box);
 
     furi_record_close(RECORD_GUI);
     free(app);

@@ -7,6 +7,7 @@
 #include <gui/modules/submenu.h>
 #include <gui/modules/widget.h>
 #include <gui/modules/button_menu.h>
+#include <gui/modules/text_box.h>
 #include <dialogs/dialogs.h>
 #include <storage/storage.h>
 #include <flipper_format/flipper_format.h>
@@ -40,6 +41,7 @@ typedef enum {
     QuickViewSubmenu,
     QuickViewWidget,
     QuickViewButtonMenu,
+    QuickViewTextBox,
 } QuickView;
 
 typedef enum {
@@ -53,6 +55,7 @@ typedef struct QuickApp {
     Submenu*        submenu;
     Widget*         widget;
     ButtonMenu*     button_menu;
+    TextBox*        text_box;
 
     QuickMode       mode;
     FuriString*     selected_path;   // full path of selected NFC or IR file

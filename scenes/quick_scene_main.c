@@ -3,6 +3,7 @@
 typedef enum {
     QuickMainNfc,
     QuickMainIr,
+    QuickMainAbout,
 } QuickMainIndex;
 
 static void quick_scene_main_callback(void* context, uint32_t index) {
@@ -13,8 +14,9 @@ static void quick_scene_main_callback(void* context, uint32_t index) {
 void quick_scene_main_on_enter(void* context) {
     QuickApp* app = context;
     submenu_reset(app->submenu);
-    submenu_add_item(app->submenu, "NFC", QuickMainNfc, quick_scene_main_callback, app);
-    submenu_add_item(app->submenu, "IR", QuickMainIr, quick_scene_main_callback, app);
+    submenu_add_item(app->submenu, "NFC",   QuickMainNfc,   quick_scene_main_callback, app);
+    submenu_add_item(app->submenu, "IR",    QuickMainIr,    quick_scene_main_callback, app);
+    submenu_add_item(app->submenu, "About", QuickMainAbout, quick_scene_main_callback, app);
     view_dispatcher_switch_to_view(app->view_dispatcher, QuickViewSubmenu);
 }
 
@@ -29,6 +31,10 @@ bool quick_scene_main_on_event(void* context, SceneManagerEvent event) {
         if(event.event == QuickMainIr) {
             app->mode = QuickModeIr;
             scene_manager_next_scene(app->scene_manager, QuickSceneIrList);
+            return true;
+        }
+        if(event.event == QuickMainAbout) {
+            scene_manager_next_scene(app->scene_manager, QuickSceneAbout);
             return true;
         }
     }
