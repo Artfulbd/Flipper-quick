@@ -1,6 +1,6 @@
 # Quick
 
-A Flipper Zero external application for fast access to all saved NFC cards, IR remotes, and 125kHz RFID keys in one place, regardless of their source.
+A Flipper Zero external application for fast access to all saved NFC cards, IR remotes, and 125kHz RFID keys in one place, regardless of their source of origin application.
 
 ## Features
 
