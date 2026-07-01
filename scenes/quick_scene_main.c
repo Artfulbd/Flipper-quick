@@ -3,6 +3,7 @@
 typedef enum {
     QuickMainNfc,
     QuickMainIr,
+    QuickMainRfid,
     QuickMainAbout,
 } QuickMainIndex;
 
@@ -16,6 +17,7 @@ void quick_scene_main_on_enter(void* context) {
     submenu_reset(app->submenu);
     submenu_add_item(app->submenu, "NFC",   QuickMainNfc,   quick_scene_main_callback, app);
     submenu_add_item(app->submenu, "IR",    QuickMainIr,    quick_scene_main_callback, app);
+    submenu_add_item(app->submenu, "RFID",  QuickMainRfid,  quick_scene_main_callback, app);
     submenu_add_item(app->submenu, "About", QuickMainAbout, quick_scene_main_callback, app);
     view_dispatcher_switch_to_view(app->view_dispatcher, QuickViewSubmenu);
 }
@@ -31,6 +33,11 @@ bool quick_scene_main_on_event(void* context, SceneManagerEvent event) {
         if(event.event == QuickMainIr) {
             app->mode = QuickModeIr;
             scene_manager_next_scene(app->scene_manager, QuickSceneIrList);
+            return true;
+        }
+        if(event.event == QuickMainRfid) {
+            app->mode = QuickModeRfid;
+            scene_manager_next_scene(app->scene_manager, QuickSceneRfidList);
             return true;
         }
         if(event.event == QuickMainAbout) {

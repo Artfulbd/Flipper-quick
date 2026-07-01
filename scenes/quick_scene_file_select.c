@@ -20,14 +20,52 @@ static void update_label(size_t i) {
              fs_names[i]);
 }
 
+static void mode_paths(QuickMode mode, const char** dir, const char** ext, const char** fav_path) {
+    switch(mode) {
+    case QuickModeNfc:
+        *dir = EXT_PATH("nfc");
+        *ext = ".nfc";
+        *fav_path = QUICK_NFC_FAV_PATH;
+        break;
+    case QuickModeRfid:
+        *dir = EXT_PATH("lfrfid");
+        *ext = ".rfid";
+        *fav_path = QUICK_RFID_FAV_PATH;
+        break;
+    case QuickModeIr:
+    default:
+        *dir = EXT_PATH("infrared");
+        *ext = ".ir";
+        *fav_path = QUICK_IR_FAV_PATH;
+        break;
+    }
+}
+
+static const char* mode_fav_path(QuickMode mode) {
+    const char* dir;
+    const char* ext;
+    const char* fav_path;
+    mode_paths(mode, &dir, &ext, &fav_path);
+    return fav_path;
+}
+
+static const char* mode_title(QuickMode mode) {
+    switch(mode) {
+    case QuickModeNfc:
+        return "NFC files";
+    case QuickModeRfid:
+        return "RFID files";
+    case QuickModeIr:
+    default:
+        return "IR files";
+    }
+}
+
 static void scan_directory(QuickApp* app) {
-    const char* dir = (app->mode == QuickModeNfc)
-                          ? EXT_PATH("nfc")
-                          : EXT_PATH("infrared");
-    const char* ext      = (app->mode == QuickModeNfc) ? ".nfc" : ".ir";
-    const char* fav_path = (app->mode == QuickModeNfc)
-                               ? QUICK_NFC_FAV_PATH
-                               : QUICK_IR_FAV_PATH;
+    const char* dir;
+    const char* ext;
+    const char* fav_path;
+    mode_paths(app->mode, &dir, &ext, &fav_path);
 
     fs_count = 0;
 
@@ -101,8 +139,7 @@ void quick_scene_file_select_on_enter(void* context) {
     scan_directory(app);
 
     submenu_reset(app->submenu);
-    const char* title = (app->mode == QuickModeNfc) ? "NFC files" : "IR files";
-    submenu_set_header(app->submenu, title);
+    submenu_set_header(app->submenu, mode_title(app->mode));
 
     for(size_t i = 0; i < fs_count; i++) {
         submenu_add_item(
@@ -123,9 +160,7 @@ bool quick_scene_file_select_on_event(void* context, SceneManagerEvent event) {
         uint32_t index = event.event;
         if(index >= fs_count) return false;
 
-        const char* fav_path = (app->mode == QuickModeNfc)
-                                   ? QUICK_NFC_FAV_PATH
-                                   : QUICK_IR_FAV_PATH;
+        const char* fav_path = mode_fav_path(app->mode);
 
         Storage* storage = furi_record_open(RECORD_STORAGE);
         storage_common_mkdir(storage, QUICK_DATA_DIR);
@@ -143,8 +178,7 @@ bool quick_scene_file_select_on_event(void* context, SceneManagerEvent event) {
 
         // Rebuild submenu in-place so the tick mark updates immediately
         submenu_reset(app->submenu);
-        const char* title = (app->mode == QuickModeNfc) ? "NFC files" : "IR files";
-        submenu_set_header(app->submenu, title);
+        submenu_set_header(app->submenu, mode_title(app->mode));
         for(size_t i = 0; i < fs_count; i++) {
             submenu_add_item(
                 app->submenu,

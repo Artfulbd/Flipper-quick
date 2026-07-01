@@ -50,6 +50,9 @@ QuickApp* quick_app_alloc(void) {
     app->nfc_device   = NULL;
     app->nfc_listener = NULL;
 
+    app->rfid_dict   = NULL;
+    app->rfid_worker = NULL;
+
     app->mode = QuickModeNfc;
 
     return app;
@@ -70,6 +73,14 @@ void quick_app_free(QuickApp* app) {
     }
     if(app->nfc_device) nfc_device_free(app->nfc_device);
     if(app->nfc)        nfc_free(app->nfc);
+
+    // Stop and free RFID if still running (should be cleaned up by scene exit)
+    if(app->rfid_worker) {
+        lfrfid_worker_stop(app->rfid_worker);
+        lfrfid_worker_stop_thread(app->rfid_worker);
+        lfrfid_worker_free(app->rfid_worker);
+    }
+    if(app->rfid_dict) protocol_dict_free(app->rfid_dict);
 
     furi_string_free(app->selected_path);
 

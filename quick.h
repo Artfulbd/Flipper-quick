@@ -17,11 +17,16 @@
 #include <nfc/protocols/nfc_protocol.h>
 #include <infrared/worker/infrared_worker.h>
 #include <infrared.h>
+#include <lfrfid/lfrfid_worker.h>
+#include <lfrfid/lfrfid_dict_file.h>
+#include <lfrfid/protocols/lfrfid_protocols.h>
+#include <toolbox/protocols/protocol_dict.h>
 
 #include "scenes/quick_scene.h"
 
 #define QUICK_NFC_FAV_PATH  EXT_PATH("apps_data/quick/nfc_favourites.txt")
 #define QUICK_IR_FAV_PATH   EXT_PATH("apps_data/quick/ir_favourites.txt")
+#define QUICK_RFID_FAV_PATH EXT_PATH("apps_data/quick/rfid_favourites.txt")
 #define QUICK_DATA_DIR      EXT_PATH("apps_data/quick")
 
 #define QUICK_MAX_FAVS      16
@@ -35,6 +40,7 @@
 typedef enum {
     QuickModeNfc,
     QuickModeIr,
+    QuickModeRfid,
 } QuickMode;
 
 typedef enum {
@@ -65,6 +71,11 @@ typedef struct QuickApp {
     Nfc*            nfc;
     NfcDevice*      nfc_device;
     NfcListener*    nfc_listener;
+
+    // RFID (125kHz LFRFID) emulation
+    ProtocolDict*   rfid_dict;
+    LFRFIDWorker*   rfid_worker;
+    ProtocolId      rfid_protocol_id;
 
     // IR transmission
     InfraredWorker* ir_worker;
