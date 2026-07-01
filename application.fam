@@ -1,0 +1,11 @@
+App(
+    appid="quick",
+    name="Quick",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="quick_app_main",
+    requires=["gui", "storage", "dialogs"],
+    stack_size=4 * 1024,
+    fap_category="Tools",
+    fap_icon="quick.png",
+    fap_version="1.0",
+)

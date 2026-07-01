@@ -1,0 +1,6 @@
+ADD_SCENE(quick, main,        Main)
+ADD_SCENE(quick, nfc_list,    NfcList)
+ADD_SCENE(quick, nfc_emulate, NfcEmulate)
+ADD_SCENE(quick, ir_list,     IrList)
+ADD_SCENE(quick, ir_remote,   IrRemote)
+ADD_SCENE(quick, file_select, FileSelect)
