@@ -66,6 +66,29 @@ static void scan_directory(QuickApp* app) {
 
     storage_file_free(dir_file);
     furi_record_close(RECORD_STORAGE);
+
+    // Sort alphabetically by name (insertion sort on parallel arrays)
+    for(size_t i = 1; i < fs_count; i++) {
+        char tmp_name[QUICK_NAME_LEN];
+        char tmp_path[QUICK_PATH_LEN];
+        bool tmp_sel;
+        strlcpy(tmp_name, fs_names[i], QUICK_NAME_LEN);
+        strlcpy(tmp_path, fs_paths[i], QUICK_PATH_LEN);
+        tmp_sel = fs_selected[i];
+        size_t j = i;
+        while(j > 0 && strcasecmp(fs_names[j - 1], tmp_name) > 0) {
+            strlcpy(fs_names[j], fs_names[j - 1], QUICK_NAME_LEN);
+            strlcpy(fs_paths[j], fs_paths[j - 1], QUICK_PATH_LEN);
+            fs_selected[j] = fs_selected[j - 1];
+            j--;
+        }
+        strlcpy(fs_names[j], tmp_name, QUICK_NAME_LEN);
+        strlcpy(fs_paths[j], tmp_path, QUICK_PATH_LEN);
+        fs_selected[j] = tmp_sel;
+    }
+
+    // Rebuild labels after sort
+    for(size_t i = 0; i < fs_count; i++) update_label(i);
 }
 
 static void quick_scene_file_select_callback(void* context, uint32_t index) {

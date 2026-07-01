@@ -60,6 +60,23 @@ size_t quick_favourites_load(
 
     storage_file_free(file);
     furi_record_close(RECORD_STORAGE);
+
+    // Sort alphabetically by name (insertion sort on parallel arrays)
+    for(size_t i = 1; i < count; i++) {
+        char tmp_name[48];
+        char tmp_path[256];
+        strlcpy(tmp_name, names[i], 48);
+        strlcpy(tmp_path, paths[i], 256);
+        size_t j = i;
+        while(j > 0 && strcasecmp(names[j - 1], tmp_name) > 0) {
+            strlcpy(names[j], names[j - 1], 48);
+            strlcpy(paths[j], paths[j - 1], 256);
+            j--;
+        }
+        strlcpy(names[j], tmp_name, 48);
+        strlcpy(paths[j], tmp_path, 256);
+    }
+
     return count;
 }
 
