@@ -25,6 +25,9 @@ void quick_scene_rfid_emulate_on_enter(void* context) {
     lfrfid_worker_start_thread(app->rfid_worker);
     lfrfid_worker_emulate_start(app->rfid_worker, (LFRFIDProtocol)app->rfid_protocol_id);
 
+    // Blink LED like the native RFID app does while emulating
+    notification_message(app->notifications, &sequence_blink_start_magenta);
+
     // Show emulate screen
     widget_reset(app->widget);
     widget_add_string_element(
@@ -50,6 +53,7 @@ void quick_scene_rfid_emulate_on_exit(void* context) {
         lfrfid_worker_stop_thread(app->rfid_worker);
         lfrfid_worker_free(app->rfid_worker);
         app->rfid_worker = NULL;
+        notification_message(app->notifications, &sequence_blink_stop);
     }
     if(app->rfid_dict) {
         protocol_dict_free(app->rfid_dict);
