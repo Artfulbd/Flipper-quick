@@ -44,6 +44,9 @@ void quick_scene_nfc_emulate_on_enter(void* context) {
     app->nfc_listener = nfc_listener_alloc(app->nfc, protocol, data);
     nfc_listener_start(app->nfc_listener, NULL, NULL);
 
+    // Blink LED like the native NFC app does while emulating
+    notification_message(app->notifications, &sequence_blink_start_magenta);
+
     // Show emulate screen
     widget_reset(app->widget);
     widget_add_string_element(
@@ -68,6 +71,7 @@ void quick_scene_nfc_emulate_on_exit(void* context) {
         nfc_listener_stop(app->nfc_listener);
         nfc_listener_free(app->nfc_listener);
         app->nfc_listener = NULL;
+        notification_message(app->notifications, &sequence_blink_stop);
     }
     if(app->nfc_device) {
         nfc_device_free(app->nfc_device);

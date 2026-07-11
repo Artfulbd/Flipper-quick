@@ -2,6 +2,7 @@
 
 static const char about_text[] =
     "Developed by artful\n"
+    "V1.0.0\n"
     "\n"
     "Quick lets you emulate NFC\n"
     "and RFID cards, and send IR\n"

@@ -31,6 +31,10 @@ static void quick_ir_tx_start(QuickApp* app) {
         app->ir_worker,
         infrared_worker_tx_get_signal_steady_callback,
         app);
+
+    // Blink LED like the native IR app does while transmitting
+    notification_message(app->notifications, &sequence_blink_start_magenta);
+
     infrared_worker_tx_start(app->ir_worker);
     app->ir_transmitting = true;
 }
@@ -39,6 +43,7 @@ static void quick_ir_tx_stop(QuickApp* app) {
     if(!app->ir_transmitting) return;
     infrared_worker_tx_stop(app->ir_worker);
     infrared_worker_tx_set_get_signal_callback(app->ir_worker, NULL, NULL);
+    notification_message(app->notifications, &sequence_blink_stop);
     app->ir_transmitting = false;
 }
 

@@ -42,6 +42,8 @@ QuickApp* quick_app_alloc(void) {
     view_dispatcher_add_view(
         app->view_dispatcher, QuickViewTextBox, text_box_get_view(app->text_box));
 
+    app->notifications = furi_record_open(RECORD_NOTIFICATION);
+
     app->selected_path = furi_string_alloc();
     app->ir_worker     = infrared_worker_alloc();
     app->ir_transmitting = false;
@@ -98,6 +100,7 @@ void quick_app_free(QuickApp* app) {
     text_box_free(app->text_box);
 
     furi_record_close(RECORD_GUI);
+    furi_record_close(RECORD_NOTIFICATION);
     free(app);
 }
 

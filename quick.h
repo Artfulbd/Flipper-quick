@@ -21,6 +21,7 @@
 #include <lfrfid/lfrfid_dict_file.h>
 #include <lfrfid/protocols/lfrfid_protocols.h>
 #include <toolbox/protocols/protocol_dict.h>
+#include <notification/notification_messages.h>
 
 #include "scenes/quick_scene.h"
 
@@ -56,12 +57,13 @@ typedef enum {
 } QuickCustomEvent;
 
 typedef struct QuickApp {
-    SceneManager*   scene_manager;
-    ViewDispatcher* view_dispatcher;
-    Submenu*        submenu;
-    Widget*         widget;
-    ButtonMenu*     button_menu;
-    TextBox*        text_box;
+    SceneManager*     scene_manager;
+    ViewDispatcher*   view_dispatcher;
+    Submenu*          submenu;
+    Widget*           widget;
+    ButtonMenu*       button_menu;
+    TextBox*          text_box;
+    NotificationApp*  notifications;
 
     QuickMode       mode;
     FuriString*     selected_path;   // full path of selected NFC or IR file
